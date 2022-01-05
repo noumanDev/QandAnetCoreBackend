@@ -84,7 +84,7 @@ namespace QandA.Data
                            );
             }
         }
-        public IEnumerable<QuestionGetManyResponse> GetQuestionsBySearchWithPaging( string search, int pageNumber, int pageSize )
+        public IEnumerable<QuestionGetManyResponse> GetQuestionsBySearchWithPaging(string search, int pageNumber, int pageSize)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -139,7 +139,15 @@ namespace QandA.Data
  );
             }
         }
-
+        public async Task<IEnumerable<QuestionGetManyResponse>> GetUnansweredQuestionsAsync()
+        {
+            using (var connection = new
+            SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                return await connection.QueryAsync<QuestionGetManyResponse>("EXEC dbo.Question_GetUnanswered");
+            }
+        }
         public AnswerGetResponse PostAnswer(AnswerPostFullRequest answer)
         {
             using (var connection = new SqlConnection(_connectionString))
